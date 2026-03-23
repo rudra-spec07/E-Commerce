@@ -1,79 +1,32 @@
-import { useState } from "react"
-import { useDispatch } from "react-redux"
-import { addToCart } from "../../features/cart/cartSlice"
-import { addToWishlist } from "../../features/wishlist/wishlistSlice"
-import { formatPrice } from "../../utils/currencyFormatter"
-import { animateToCart } from "../../utils/Animation"
-import RatingStars from "./RatingStars"
-import ProductModal from "./ProductModal"
+import React from "react";
+import { useDispatch } from "react-redux";
+import { addToCart, addToWishlist } from "../../features/cart/cartSlice";
+import "../../styles/product.css";
 
-function ProductCard({product}){
+const ProductCard = ({ product }) => {
+  const dispatch = useDispatch();
 
-const dispatch = useDispatch()
+  const handleCart = () => {
+    dispatch(addToCart(product));
+    alert("Added to Cart ✅");
+  };
 
-const [showModal,setShowModal] = useState(false)
-const [liked,setLiked] = useState(false)
+  const handleWishlist = () => {
+    dispatch(addToWishlist(product));
+    alert("Added to Wishlist ❤️");
+  };
 
-return(
+  return (
+    <div className="card">
+      <img src={product.thumbnail} alt="" />
 
-<>
+      <h4>{product.title}</h4>
+      <p>₹ {product.price}</p>
 
-<div className="card">
+      <button onClick={handleCart}>Buy Now</button>
+      <button onClick={handleWishlist}>❤️ Wishlist</button>
+    </div>
+  );
+};
 
-<div
-className="wishlist-heart"
-onClick={()=>{
-setLiked(!liked)
-dispatch(addToWishlist(product))
-}}
->
-{liked ? "❤️" : "🤍"}
-</div>
-
-<div className="image-wrapper">
-
-<img src={product.image} alt={product.name}/>
-
-</div>
-
-<div className="card-body">
-
-<h3>{product.name}</h3>
-
-<RatingStars rating={product.rating}/>
-
-<p className="price">{formatPrice(product.price)}</p>
-
-<button
-className="btn-cart"
-onClick={(e)=>{
-dispatch(addToCart(product))
-animateToCart(e)
-}}
->
-Add To Cart
-</button>
-
-<button
-className="btn-view"
-onClick={()=>setShowModal(true)}
->
-Quick View
-</button>
-
-</div>
-
-</div>
-
-<ProductModal
-product={showModal ? product : null}
-onClose={()=>setShowModal(false)}
-/>
-
-</>
-
-)
-
-}
-
-export default ProductCard
+export default ProductCard;

@@ -1,98 +1,106 @@
-import { Link } from "react-router-dom"
-import { useSelector } from "react-redux"
-import { useState } from "react"
-import CartDropdown from "../cart/CartDropdown"
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setSearch, setCategory } from "../../features/products/productsSlice";
+import "../../styles/navbar.css";
 
-function Navbar(){
+const Navbar = () => {
+  const dispatch = useDispatch();
 
-const cartItems = useSelector(state=>state.cart.items)
-const products = useSelector(state=>state.products.all)
+  const [active, setActive] = useState("");
+  const [user, setUser] = useState(localStorage.getItem("user"));
 
-const [search,setSearch] = useState("")
-const [results,setResults] = useState([])
-const [showCart,setShowCart] = useState(false)
+  // ✅ GET CART + WISHLIST COUNT
+  const cartCount = useSelector((state) => state.cart.cart.length);
+  const wishlistCount = useSelector((state) => state.cart.wishlist.length);
 
-function handleSearch(e){
+  const handleCategory = (cat) => {
+    setActive(cat);
+    dispatch(setCategory(cat));
+  };
 
-const value = e.target.value
+  return (
+    <div className="navbar">
 
-setSearch(value)
+      {/* LOGO */}
+      <h2 className="logo">MyStore</h2>
 
-if(value===""){
-setResults([])
-return
-}
+      {/* SEARCH */}
+      <input
+        type="text"
+        placeholder="Search for products..."
+        onChange={(e) => dispatch(setSearch(e.target.value))}
+      />
 
-const filtered = products.filter(p =>
-p.name.toLowerCase().includes(value.toLowerCase())
-)
+      {/* CATEGORIES */}
+      <div className="categories">
+        <button
+          className={active === "smartphones" ? "active" : ""}
+          onClick={() => handleCategory("smartphones")}
+        >
+          Mobiles
+        </button>
 
-setResults(filtered)
+        <button
+          className={active === "laptops" ? "active" : ""}
+          onClick={() => handleCategory("laptops")}
+        >
+          Electronics
+        </button>
 
-}
+        <button
+          className={active === "fragrances" ? "active" : ""}
+          onClick={() => handleCategory("fragrances")}
+        >
+          Beauty
+        </button>
 
-return(
+        <button
+          className={active === "" ? "active" : ""}
+          onClick={() => handleCategory("")}
+        >
+          All
+        </button>
+      </div>
 
-<nav className="navbar">
+      {/* RIGHT SIDE */}
+      <div className="nav-right">
 
-<div className="logo">ShopX</div>
+        {/* ❤️ WISHLIST */}
+        <button className="nav-btn">
+          ❤️ Wishlist ({wishlistCount})
+        </button>
 
-{/* SEARCH BAR */}
+        {/* 🛒 CART */}
+        <button className="nav-btn">
+          🛒 Cart ({cartCount})
+        </button>
 
-<div className="search-container">
+        {/* 🔐 LOGIN / LOGOUT */}
+        {user ? (
+          <button
+            className="nav-btn login"
+            onClick={() => {
+              localStorage.removeItem("user");
+              setUser(null);
+            }}
+          >
+            Logout
+          </button>
+        ) : (
+          <button
+            className="nav-btn login"
+            onClick={() => {
+              localStorage.setItem("user", "User");
+              setUser("User");
+            }}
+          >
+            Login
+          </button>
+        )}
+      </div>
 
-<input
-type="text"
-placeholder="Search products..."
-value={search}
-onChange={handleSearch}
-/>
+    </div>
+  );
+};
 
-{results.length > 0 && (
-
-<div className="search-dropdown">
-
-{results.map(p=>(
-<div key={p.id} className="search-item">
-{p.name}
-</div>
-))}
-
-</div>
-
-)}
-
-</div>
-
-{/* NAV LINKS */}
-
-<div className="nav-links">
-
-<Link to="/">Home</Link>
-
-<Link to="/wishlist">Wishlist</Link>
-
-<div
-className="cart-icon"
-onMouseEnter={()=>setShowCart(true)}
-onMouseLeave={()=>setShowCart(false)}
->
-
-<Link to="/cart">
-Cart
-<span className="badge">{cartItems.length}</span>
-</Link>
-
-{showCart && <CartDropdown/>}
-
-</div>
-
-</div>
-
-</nav>
-
-)
-
-}
-
-export default Navbar
+export default Navbar;

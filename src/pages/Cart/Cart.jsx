@@ -1,35 +1,42 @@
-import { formatPrice } from "../../utils/currencyFormatter.js";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromCart } from "../../features/cart/cartSlice";
+import "../../styles/cart.css";
 
-import { useSelector,useDispatch } from "react-redux"
-import { removeFromCart } from "../../features/cart/cartSlice.js"
+const Cart = () => {
+  const { cart } = useSelector((s) => s.cart);
+  const dispatch = useDispatch();
 
-function Cart(){
+  const total = cart.reduce((acc, item) => acc + item.price, 0);
 
-const items = useSelector(state=>state.cart.items)
-const dispatch = useDispatch()
+  return (
+    <div className="cart-page">
+      <h2>🛒 My Cart</h2>
 
-return(
-<div>
+      {cart.length === 0 ? (
+        <p>Your cart is empty</p>
+      ) : (
+        <>
+          {cart.map((item) => (
+            <div className="cart-item" key={item.id}>
+              <img src={item.thumbnail} alt="" />
 
-<h1>Shopping Cart</h1>
+              <div>
+                <h4>{item.title}</h4>
+                <p>₹ {item.price}</p>
+              </div>
 
-{items.map(item=>(
-<div key={item.id} className="cart-item">
-<div>
-<h3>{item.name}</h3>
-<p>{item.quantity} x {formatPrice(item.price)}</p>
+              <button onClick={() => dispatch(removeFromCart(item.id))}>
+                Remove
+              </button>
+            </div>
+          ))}
 
-</div>
+          <h3>Total: ₹ {total}</h3>
+        </>
+      )}
+    </div>
+  );
+};
 
-<button onClick={()=>dispatch(removeFromCart(item.id))}>
-Remove
-</button>
-
-</div>
-))}
-
-</div>
-)
-}
-
-export default Cart
+export default Cart;

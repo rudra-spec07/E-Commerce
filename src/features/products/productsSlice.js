@@ -1,44 +1,33 @@
-import { createSlice } from "@reduxjs/toolkit"
-import products from "../../api/mockData.js"
+import { createSlice } from "@reduxjs/toolkit";
 
-const productsSlice = createSlice({
-  name:"products",
+const initialState = {
+  products: [],
+  search: "",
+  category: "",
+};
 
-  initialState:{
-    all:products,
-    filtered:products
+const productSlice = createSlice({
+  name: "products",
+  initialState,
+  reducers: {
+    setProducts: (state, action) => {
+      state.products = action.payload;
+    },
+    setSearch: (state, action) => {
+      state.search = action.payload;
+    },
+    setCategory: (state, action) => {
+      state.category = action.payload;
+    },
   },
+});
 
-  reducers:{
+export const { setProducts, setSearch, setCategory } = productSlice.actions;
 
-    filterByCategory:(state,action)=>{
-      state.filtered = state.all.filter(
-        p => p.category === action.payload
-      )
-    },
+export const fetchProducts = () => async (dispatch) => {
+  const res = await fetch("https://dummyjson.com/products");
+  const data = await res.json();
+  dispatch(setProducts(data.products));
+};
 
-    resetFilters:(state)=>{
-      state.filtered = state.all
-    },
-
-    searchProducts:(state,action)=>{
-
-      const keyword = action.payload.toLowerCase()
-
-      state.filtered = state.all.filter(product =>
-        product.name.toLowerCase().includes(keyword)
-      )
-
-    }
-
-  }
-
-})
-
-export const {
-  filterByCategory,
-  resetFilters,
-  searchProducts
-} = productsSlice.actions
-
-export default productsSlice.reducer
+export default productSlice.reducer;

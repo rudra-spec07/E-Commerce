@@ -1,22 +1,36 @@
-import { useSelector } from "react-redux"
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromWishlist } from "../../features/cart/cartSlice";
+import "../../styles/cart.css";
 
-function Wishlist(){
+const Wishlist = () => {
+  const { wishlist } = useSelector((s) => s.cart);
+  const dispatch = useDispatch();
 
-const items = useSelector(state=>state.wishlist.items)
+  return (
+    <div className="cart-page">
+      <h2>❤️ Wishlist</h2>
 
-return(
-<div>
-<h1>Wishlist</h1>
+      {wishlist.length === 0 ? (
+        <p>No items in wishlist</p>
+      ) : (
+        wishlist.map((item) => (
+          <div className="cart-item" key={item.id}>
+            <img src={item.thumbnail} alt="" />
 
-{items.map(item=>(
-<div key={item.id}>
-<h3>{item.name}</h3>
-<p>${item.price}</p>
-</div>
-))}
+            <div>
+              <h4>{item.title}</h4>
+              <p>₹ {item.price}</p>
+            </div>
 
-</div>
-)
-}
+            <button onClick={() => dispatch(removeFromWishlist(item.id))}>
+              Remove
+            </button>
+          </div>
+        ))
+      )}
+    </div>
+  );
+};
 
-export default Wishlist
+export default Wishlist;
