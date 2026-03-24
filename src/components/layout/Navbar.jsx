@@ -36,17 +36,17 @@ const Navbar = () => {
       {/* CATEGORIES */}
       <div className="categories">
         <button
-          className={active === "smartphones" ? "active" : ""}
-          onClick={() => handleCategory("smartphones")}
+          className={active === "furniture" ? "active" : ""}
+          onClick={() => handleCategory("furniture")}
         >
-          Mobiles
+          Furniture
         </button>
 
         <button
-          className={active === "laptops" ? "active" : ""}
-          onClick={() => handleCategory("laptops")}
+          className={active === "groceries" ? "active" : ""}
+          onClick={() => handleCategory("groceries")}
         >
-          Electronics
+          Groceries
         </button>
 
         <button
