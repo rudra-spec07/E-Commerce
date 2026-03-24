@@ -27,7 +27,11 @@ export const { setProducts, setSearch, setCategory } = productSlice.actions;
 export const fetchProducts = () => async (dispatch) => {
   const res = await fetch("https://dummyjson.com/products");
   const data = await res.json();
-  dispatch(setProducts(data.products));
+
+  // remove product with id 17
+  const filteredProducts = data.products.filter((product) => product.id !== 17);
+
+  dispatch(setProducts(filteredProducts));
 };
 
 export default productSlice.reducer;
