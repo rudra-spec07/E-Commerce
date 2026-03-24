@@ -4,15 +4,17 @@ import App from "./App.jsx";
 import "./index.css";
 import "./styles/global.css";
 
-/* ✅ ADD THESE TWO LINES */
 import { Provider } from "react-redux";
 import { store } from "./features/store";
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {/* ✅ WRAP APP WITH PROVIDER */}
+    {/* ✅ WRAP APP WITH PROVIDER AND BROWSERROUTER */}
     <Provider store={store}>
-      <App />
+      <BrowserRouter basename="/E-Commerce">
+        <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );

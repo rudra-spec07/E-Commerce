@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setSearch, setCategory } from "../../features/products/productsSlice";
 import "../../styles/navbar.css";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [active, setActive] = useState("");
   const [user, setUser] = useState(localStorage.getItem("user"));
@@ -22,7 +24,7 @@ const Navbar = () => {
     <div className="navbar">
 
       {/* LOGO */}
-      <h2 className="logo">MyStore</h2>
+      <h2 className="logo" onClick={() => navigate("/")} style={{ cursor: "pointer" }}>MyStore</h2>
 
       {/* SEARCH */}
       <input
@@ -66,12 +68,12 @@ const Navbar = () => {
       <div className="nav-right">
 
         {/* ❤️ WISHLIST */}
-        <button className="nav-btn">
+        <button className="nav-btn" onClick={() => navigate("/wishlist")}>
           ❤️ Wishlist ({wishlistCount})
         </button>
 
         {/* 🛒 CART */}
-        <button className="nav-btn">
+        <button className="nav-btn" onClick={() => navigate("/cart")}>
           🛒 Cart ({cartCount})
         </button>
 
