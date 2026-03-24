@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     {/* ✅ WRAP APP WITH PROVIDER AND BROWSERROUTER */}
     <Provider store={store}>
-      <BrowserRouter basename="/E-Commerce">
+      <BrowserRouter>
         <App />
       </BrowserRouter>
     </Provider>
