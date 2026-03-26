@@ -6,6 +6,7 @@ import Navbar from "./components/layout/Navbar";
 import ProductGrid from "./components/product/ProductGrid";
 import Cart from "./pages/Cart/Cart";
 import Wishlist from "./pages/Wishlist/Wishlist";
+import Login from "./pages/Login/Login";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,6 +22,8 @@ function App() {
         <Route path="/" element={<ProductGrid />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/login" element={<Login />} />
+
       </Routes>
     </>
   );

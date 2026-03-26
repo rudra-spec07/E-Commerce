@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setSearch, setCategory } from "../../features/products/productsSlice";
+import { logout } from "../../features/auth/authSlice";
 import "../../styles/navbar.css";
 
 const Navbar = () => {
@@ -9,7 +10,9 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const [active, setActive] = useState("");
-  const [user, setUser] = useState(localStorage.getItem("user"));
+
+  // ✅ GET USER FROM REDUX
+  const user = useSelector((state) => state.auth.user);
 
   // ✅ GET CART + WISHLIST COUNT
   const cartCount = useSelector((state) => state.cart.cart.length);
@@ -20,11 +23,22 @@ const Navbar = () => {
     dispatch(setCategory(cat));
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+  };
+
   return (
     <div className="navbar">
 
       {/* LOGO */}
-      <h2 className="logo" onClick={() => navigate("/")} style={{ cursor: "pointer" }}>MyStore</h2>
+      <h2
+        className="logo"
+        onClick={() => navigate("/")}
+        style={{ cursor: "pointer" }}
+      >
+        MyStore
+      </h2>
 
       {/* SEARCH */}
       <input
@@ -81,20 +95,14 @@ const Navbar = () => {
         {user ? (
           <button
             className="nav-btn login"
-            onClick={() => {
-              localStorage.removeItem("user");
-              setUser(null);
-            }}
+            onClick={handleLogout}
           >
             Logout
           </button>
         ) : (
           <button
             className="nav-btn login"
-            onClick={() => {
-              localStorage.setItem("user", "User");
-              setUser("User");
-            }}
+            onClick={() => navigate("/login")}
           >
             Login
           </button>
